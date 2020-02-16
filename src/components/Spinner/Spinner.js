@@ -1,9 +1,18 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import './styles.css';
 
-export default class Spinner extends Component {
+const Spinner = () => {
 
-    render() {
-    }
+    return (
+        <div className="loadingio-spinner-dual-ball-c3g5x3i5epk">
+            <div className="ldio-d0jqpcq3g5s">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    );
 };
+
+export default Spinner;
