@@ -16,15 +16,16 @@ export default class Hero extends Component {
 
     componentDidMount() {
         this.loadRandomPlanet();
+        this.interval = setInterval(this.loadRandomPlanet, 10000);
     }
 
-    loadRandomPlanet() {
+    loadRandomPlanet = () => {
         const id = Math.floor(Math.random() * 25) + 2;
         this.swapiService
             .getPlanet(id)
             .then(this.onPlanetLoaded)
             .catch(this.onError)
-    }
+    };
 
     onPlanetLoaded = (planet) => {
         this.setState({planet, loading: false});
@@ -48,6 +49,10 @@ export default class Hero extends Component {
                 {content}
             </div>
         );
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 };
 

@@ -6,17 +6,25 @@ import Hero from "../Hero";
 import ItemList from "../ItemList";
 import ItemDetails from "../ItemDetails";
 import SwapiService from "../../services/swapiService";
+import ErrorButton from "../ErrorBanner";
+import ErrorIndicator from "../ErrorIndicator";
 
 export default class App extends Component {
 
     swapiService = new SwapiService();
 
     state = {
-        items: []
+        showRandomPlanet: true,
+        selectedPerson: null,
+        hasError: false
     };
 
     componentDidMount() {
         this.loadItems();
+    }
+
+    componentDidCatch(error, errorInfo) {
+        this.setState({hasError: true});
     }
 
     loadItems() {
@@ -29,18 +37,42 @@ export default class App extends Component {
         this.setState({items})
     };
 
+    toggleRandomPlanet = () => {
+        this.setState((state) => {
+            return {
+                showRandomPlanet: !state.showRandomPlanet
+            }
+        });
+    };
+
+    onPersonSelected = (id) => {
+        this.setState({
+            selectedPerson: id
+        })
+    };
+
     render() {
-        const {items} = this.state;
+        if (this.state.hasError) {
+            return <ErrorIndicator/>
+        }
+
+        const hero = this.state.showRandomPlanet ? <Hero/> : null;
         return (
             <div>
                 <Header/>
-                <Hero/>
+                {hero}
+                <button
+                    className="toggle-planet btn btn-warning btn-lg"
+                    onClick={this.toggleRandomPlanet}>
+                    Toggle Random Planet
+                </button>
+                <ErrorButton/>
                 <div className="row mb2">
                     <div className="col-md-6">
-                        <ItemList items={items}/>
+                        <ItemList onItemSelected={this.onPersonSelected}/>
                     </div>
                     <div className="col-md-6">
-                        <ItemDetails/>
+                        <ItemDetails personId={this.state.selectedPerson}/>
                     </div>
                 </div>
             </div>
